@@ -1,6 +1,6 @@
 {
     "name": "altamash80/laminas-mvc-bootstrap-menu",
-    "description": "Validate and display simple and complex forms, casting forms to business objects and vice versa",
+    "description": "This repository can generate nested bootstrap menu based on ul li tag. More may come later. Thanks!",
     "license": "BSD-3-Clause",
     "keywords": [
         "laminas",
