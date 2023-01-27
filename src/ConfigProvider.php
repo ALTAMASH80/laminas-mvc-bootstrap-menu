@@ -69,6 +69,7 @@ class ConfigProvider
             'factories' => [
                 'lrphpt_navigation' => Navigation\Service\LrphptNavigationFactory::class,
             ],
+            'view_helpers' => $this->getViewHelperConfig(),
         ];
     }
     
@@ -82,4 +83,11 @@ class ConfigProvider
         ];
     }
 
+    public function getViewHelperConfig(){
+        return [
+            'factories' => [
+                'LmcRbacAuthorizationServiceHelper' => View\Helper\LmcRbacAuthorizationServiceHelperFactory::class,
+            ]
+        ];
+    }
 }

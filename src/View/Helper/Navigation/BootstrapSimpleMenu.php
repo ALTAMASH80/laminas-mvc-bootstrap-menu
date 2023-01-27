@@ -106,9 +106,9 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
                     $ulClass = ' class="dropdown-menu dropright "';
                 }
                 if($depth){
-                    $html .= $myIndent . '<div' . $ulClass . ' ">' . PHP_EOL;
+                    $html .= $myIndent . '<div' . $ulClass . ' >' . PHP_EOL;
                 }else{
-                    $html .= $myIndent . '<ul' . $ulClass . ' ">' . PHP_EOL;
+                    $html .= $myIndent . '<ul' . $ulClass . ' >' . PHP_EOL;
                 }
                 
             } elseif ($prevDepth > $depth) {
@@ -143,7 +143,7 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
                 $html .= '    ' . PHP_EOL
                 . $myIndent . '        ' . $this->htmlify($page, $escapeLabels, $addClassToListItem, $depth) . PHP_EOL;
             }else{
-                $html .= $myIndent . '    <li' . $liClass . '">' . PHP_EOL
+                $html .= $myIndent . '    <li' . $liClass . '>' . PHP_EOL
                 . $myIndent . '        ' . $this->htmlify($page, $escapeLabels, $addClassToListItem, $depth) . PHP_EOL 
                 . PHP_EOL;
                 if(!$page->hasPages(!$this->renderInvisible)){
@@ -210,6 +210,60 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
         $html .= '</' . $element . '>';
     
         return $html;
+    }
+    
+    /**
+     * Determines whether a page should be accepted when iterating
+     *
+     * Default listener may be 'overridden' by attaching listener to 'isAllowed'
+     * method. Listener must be 'short circuited' if overriding default ACL
+     * listener.
+     *
+     * Rules:
+     * - If a page is not visible it is not accepted, unless RenderInvisible has
+     *   been set to true
+     * - If $useAcl is true (default is true):
+     *      - Page is accepted if listener returns true, otherwise false
+     * - If page is accepted and $recursive is true, the page
+     *   will not be accepted if it is the descendant of a non-accepted page
+     *
+     * @param   AbstractPage    $page       page to check
+     * @param   bool            $recursive  [optional] if true, page will not be
+     *                                      accepted if it is the descendant of
+     *                                      a page that is not accepted. Default
+     *                                      is true
+     * @return  bool                        Whether page should be accepted
+     */
+    public function accept(AbstractPage $page, $recursive = true)
+    {
+        $accept = true;
+
+        if (! $page->isVisible(false) && ! $this->getRenderInvisible()) {
+            $accept = false;
+        } elseif ($this->getAuthorizationService()) {
+            if(!empty(trim($page->getResource()))){
+                $accept = $this->lmcUserAuthorizationService->isGranted($page->getResource());
+            }
+        }
+
+        if ($accept && $recursive) {
+            $parent = $page->getParent();
+            
+            if ($parent instanceof AbstractPage) {
+                $accept = $this->accept($parent, true);
+            }
+        }
+
+        return $accept;
+    }
+
+    public function getAuthorizationService(){
+        return $this->lmcUserAuthorizationService;
+    }
+
+    public function setAuthorizationService(LmcRbacAuthorizationService $authorizationService){
+        $this->lmcUserAuthorizationService = $authorizationService;
+        return $this;
     }
 }
 
