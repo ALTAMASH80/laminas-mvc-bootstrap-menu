@@ -69,10 +69,9 @@ class ConfigProvider
             'factories' => [
                 'lrphpt_navigation' => Navigation\Service\LrphptNavigationFactory::class,
             ],
-            'view_helpers' => $this->getViewHelperConfig(),
         ];
     }
-    
+
     public function getNavigationHelper(){
         return [    
             'delegators' => [
