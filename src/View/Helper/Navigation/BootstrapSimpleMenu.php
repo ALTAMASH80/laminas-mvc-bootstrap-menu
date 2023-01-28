@@ -6,6 +6,7 @@ use Laminas\Navigation\AbstractContainer;
 use RecursiveIteratorIterator;
 use Laminas\Navigation\Page\AbstractPage;
 use Laminas\View\Helper\Navigation\HelperInterface;
+use LRPHPT\View\Helper\LmcRbacAuthorizationService;
 
 class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
 {
