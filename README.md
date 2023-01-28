@@ -43,6 +43,7 @@ return [
         'home' => [
            'label' => 'Home',
            'route' => 'home',
+           'resource' => 'home',
         ],
         'category' => [
           'label' => 'Category',
@@ -55,6 +56,7 @@ return [
             'laminas' => [
               'label' => 'Laminas',
               'uri' => 'https://getlaminas.org/',
+              'resource' => 'lmcuser',
             ],
             'devider' => [
                'label' => '--devider', // most important
@@ -78,5 +80,8 @@ return [
 
 <?=$this->navigation('default')
                     ->bootstrapMenu()
-                    ->setUlClass('navbar-nav'); ?>
+                    ->setUlClass('navbar-nav')
+                    // Optional setting to use with LmcRbac route guard.
+                    ->setAuthorizationService($this->LmcRbacAuthorizationServiceHelper())
+                    ; ?>
 ```
