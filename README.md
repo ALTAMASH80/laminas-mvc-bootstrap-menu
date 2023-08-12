@@ -2,7 +2,7 @@
 This repository will contain bootstrap menu integration with laminas-mvc
 
 ## Pre-Requisites
-You need to have bootstrap css and js file included in your layout.phtml. If not, you can still be able to see the generated html.
+You need to have bootstrap css and js files included in your layout.phtml. If not, you can still be able to see the generated html.
 
 ## Introduction
 
@@ -59,8 +59,8 @@ return [
               'resource' => 'lmcuser',
             ],
             'devider' => [
-               'label' => '--devider', // most important
-               'route' => '#',
+               'label' => '--devider--', // most important
+               'uri' => '#',
             ],
             'magento' => [
               'label' => 'Magento',
@@ -85,3 +85,8 @@ return [
                     ->setAuthorizationService($this->LmcRbacAuthorizationServiceHelper())
                     ; ?>
 ```
+## Below is a list of some tutorials I've written.
+1. [Installation](https://www.lrphpt.com/blog/post/tutorial-installation-of-laminas-mvc-and-digesting-it/13)
+2. [Setting up LmcUser in Laminas MVC with Doctrine](https://www.lrphpt.com/blog/post/tutorial-2-to-use-lmcuser-in-laminas-mvc-a-user-creation-module-with-doctrine/14)
+3. [Setting up LmcRbacMVC with LmcUser](https://www.lrphpt.com/blog/post/tutorial-3-usage-of-lmcrbacmvc-with-lmcuserdoctrine/15)
+ 
