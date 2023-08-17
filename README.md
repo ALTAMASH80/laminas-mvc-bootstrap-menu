@@ -85,8 +85,4 @@ return [
                     ->setAuthorizationService($this->LmcRbacAuthorizationServiceHelper())
                     ; ?>
 ```
-## Below is a list of some tutorials I've written.
-1. [Installation](https://www.lrphpt.com/blog/post/tutorial-installation-of-laminas-mvc-and-digesting-it/13)
-2. [Setting up LmcUser in Laminas MVC with Doctrine](https://www.lrphpt.com/blog/post/tutorial-2-to-use-lmcuser-in-laminas-mvc-a-user-creation-module-with-doctrine/14)
-3. [Setting up LmcRbacMVC with LmcUser](https://www.lrphpt.com/blog/post/tutorial-3-usage-of-lmcrbacmvc-with-lmcuserdoctrine/15)
  
