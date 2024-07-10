@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace LRPHPT\View\Helper;
 
@@ -6,6 +7,7 @@ use Laminas\View\Helper\Navigation as NavigationHelper;
 use Laminas\View\Helper\Navigation\Menu;
 use Psr\Container\ContainerInterface;
 use LRPHPT\View\Helper\Navigation\BootstrapSimpleMenu as lrphptMenu;
+use LRPHPT\View\Helper\Navigation\HcOffCanvasMenu;
 
 class NavigationHelperDelegator
 {
@@ -17,7 +19,11 @@ class NavigationHelperDelegator
         ): NavigationHelper {
             /** @var NavigationHelper $helper */
             $helper = $callback();
-            
+
+            $helper->getPluginManager()->setAlias(
+                'menu',
+                Menu::class
+            );
             // Add new helper
             $helper->getPluginManager()->setInvokableClass(
                 lrphptMenu::class,
@@ -27,7 +33,16 @@ class NavigationHelperDelegator
                 'bootstrapMenu',
                 lrphptMenu::class
             );
-            
+
+            $helper->getPluginManager()->setInvokableClass(
+                HcOffCanvasMenu::class,
+                HcOffCanvasMenu::class
+            );
+            $helper->getPluginManager()->setAlias(
+                'hcOffCanvasMenu',
+                HcOffCanvasMenu::class
+            );
+
             return $helper;
     }
 }

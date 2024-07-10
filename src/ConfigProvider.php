@@ -82,11 +82,11 @@ class ConfigProvider
         ];
     }
 
-    public function getViewHelperConfig(){
+    /*public function getViewHelperConfig(){
         return [
             'factories' => [
                 'LmcRbacAuthorizationServiceHelper' => View\Helper\LmcRbacAuthorizationServiceHelperFactory::class,
             ]
         ];
-    }
+    }*/
 }
