@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace LRPHPT\View\Helper\Navigation;
 
 use Laminas\View\Helper\Navigation\Menu as LaminasMenu;
@@ -6,11 +8,9 @@ use Laminas\Navigation\AbstractContainer;
 use RecursiveIteratorIterator;
 use Laminas\Navigation\Page\AbstractPage;
 use Laminas\View\Helper\Navigation\HelperInterface;
-use LRPHPT\View\Helper\LmcRbacAuthorizationService;
 
 class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
 {
-    
     /**
      * Renders a normal menu (called from {@link renderMenu()})
      *
@@ -37,19 +37,19 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
         $liActiveClass
     ) {
         $html = '';
-    
+
         // find deepest active
         $found = $this->findActive($container, $minDepth, $maxDepth);
         /* @var $escaper \Laminas\View\Helper\EscapeHtmlAttr */
         $escaper = $this->view->plugin('escapeHtmlAttr');
-    
+
         if ($found) {
             $foundPage  = $found['page'];
             $foundDepth = $found['depth'];
         } else {
             $foundPage = null;
         }
-    
+
         // create iterator
         $iterator = new RecursiveIteratorIterator(
             $container,
@@ -58,7 +58,7 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
         if (is_int($maxDepth)) {
             $iterator->setMaxDepth($maxDepth);
         }
-    
+
         // iterate container
         $prevDepth = -1;
         foreach ($iterator as $page) {
@@ -84,12 +84,12 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
                             }
                     }
                 }
-    
+
                 if (!$accept) {
                     continue;
                 }
             }
-    
+
             if(strcmp('--devider--',$page->getLabel()) === 0 ){
                 $html .= '<div class="dropdown-divider"></div>';
                 continue;
@@ -98,7 +98,7 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
             // make sure indentation is correct
             $depth -= $minDepth;
             $myIndent = $indent . str_repeat('        ', $depth);
-    
+
             if ($depth > $prevDepth) {
                 // start new ul tag
                 if ($ulClass && $depth ==  0) {
@@ -111,7 +111,6 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
                 }else{
                     $html .= $myIndent . '<ul' . $ulClass . ' >' . PHP_EOL;
                 }
-                
             } elseif ($prevDepth > $depth) {
                 // close li/ul tags until we're at current depth
                 for ($i = $prevDepth; $i > $depth; $i--) {
@@ -120,8 +119,8 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
                 }
                 // close previous li tag
                 $html .= $myIndent . '    </li>' . PHP_EOL;
-            } 
-    
+            }
+
             // render li tag and page
             $liClasses = [];
             // Is page active?
@@ -155,7 +154,7 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
             // store as previous depth for next iteration
             $prevDepth = $depth;
         }
-    
+
         if ($html) {
             // done iterating container; close open ul/li tags
             for ($i = $prevDepth+1; $i > 0; $i--) {
@@ -165,10 +164,10 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
             }
             $html = rtrim($html, PHP_EOL);
         }
-        
+
         return $html;
     }
-    
+
     public function htmlify(AbstractPage $page, $escapeLabel = true, $addClassToListItem = false, $depth = 0)
     {
         // get attribs for element
@@ -180,7 +179,7 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
         if ($addClassToListItem === false) {
             $attribs['class'] = $page->getClass();
         }
-    
+
         // does page have a href?
         $href = $page->getHref();
         if ($href) {
@@ -190,13 +189,13 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
         } else {
             $element = 'span';
         }
-    
+
         $anchorAttributes = $anchorDropdownIcon = '';
         if($page->hasPages(!$this->renderInvisible)){
             $anchorDropdownIcon = ' dropdown-toggle';
             $anchorAttributes = ' data-toggle="dropdown" aria-haspopup="true"';
         }
-        
+
         $html  = '<' . $element . $this->htmlAttribs($attribs) . 
             ' class="nav-link' . $anchorDropdownIcon .'"' . $anchorAttributes .'>';
         $label = $this->translate($page->getLabel(), $page->getTextDomain());
@@ -207,64 +206,10 @@ class BootstrapSimpleMenu extends LaminasMenu implements HelperInterface
         } else {
             $html .= $label ;
         }
-        
+
         $html .= '</' . $element . '>';
-    
+
         return $html;
-    }
-    
-    /**
-     * Determines whether a page should be accepted when iterating
-     *
-     * Default listener may be 'overridden' by attaching listener to 'isAllowed'
-     * method. Listener must be 'short circuited' if overriding default ACL
-     * listener.
-     *
-     * Rules:
-     * - If a page is not visible it is not accepted, unless RenderInvisible has
-     *   been set to true
-     * - If $useAcl is true (default is true):
-     *      - Page is accepted if listener returns true, otherwise false
-     * - If page is accepted and $recursive is true, the page
-     *   will not be accepted if it is the descendant of a non-accepted page
-     *
-     * @param   AbstractPage    $page       page to check
-     * @param   bool            $recursive  [optional] if true, page will not be
-     *                                      accepted if it is the descendant of
-     *                                      a page that is not accepted. Default
-     *                                      is true
-     * @return  bool                        Whether page should be accepted
-     */
-    public function accept(AbstractPage $page, $recursive = true)
-    {
-        $accept = true;
-
-        if (! $page->isVisible(false) && ! $this->getRenderInvisible()) {
-            $accept = false;
-        } elseif ($this->getAuthorizationService()) {
-            if(!empty(trim($page->getResource()))){
-                $accept = $this->lmcUserAuthorizationService->isGranted($page->getResource());
-            }
-        }
-
-        if ($accept && $recursive) {
-            $parent = $page->getParent();
-            
-            if ($parent instanceof AbstractPage) {
-                $accept = $this->accept($parent, true);
-            }
-        }
-
-        return $accept;
-    }
-
-    public function getAuthorizationService(){
-        return $this->lmcUserAuthorizationService;
-    }
-
-    public function setAuthorizationService(LmcRbacAuthorizationService $authorizationService){
-        $this->lmcUserAuthorizationService = $authorizationService;
-        return $this;
     }
 }
 

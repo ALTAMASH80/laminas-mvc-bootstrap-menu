@@ -85,4 +85,160 @@ return [
                     ->setAuthorizationService($this->LmcRbacAuthorizationServiceHelper())
                     ; ?>
 ```
- 
+## HcOffCanvas Menu
+
+
+```php
+<?php
+
+// Application/config/module.config.php
+use LRPHPT\Navigation\Page as LrphptPage;
+
+return [
+
+    // ...
+    'navigation' => [
+      'default' => [
+        'home' => [
+           'label' => 'Home',
+           'route' => 'home',
+           'liClass' => 'collections',
+           'type' => LrphptPage\MvcPage::class,
+        ],
+        'cryptocurrency' => [
+          'label' => 'Cryptocurrency',
+          'type' => LrphptPage\UriPage::class,
+          'liClass' => 'cryptocurrency',
+          'uri' => 'https://www.google.com/search?q=Crypto',
+          'pages' => [
+            'bitcoin' => [
+              'label' => 'Bitcoin',
+              'uri' => 'https://www.php.net',
+              'type' => LrphptPage\UriPage::class,
+            ],
+            'ethereum' => [
+              'label' => 'Ethereum',
+              'uri' => 'https://getlaminas.org/',
+              'type' => LrphptPage\UriPage::class,
+            ],
+          ],
+        ],
+        'devices' => [
+          'label' => 'Devices',
+          'type' => LrphptPage\UriPage::class,
+          'liClass' => 'devices',
+          'uri' => '#',
+          'type' => LrphptPage\UriPage::class,
+          'pages' => [
+            'mobile' => [
+              'label' => 'Mobile Phones',
+              'uri' => '#',
+              'liClass' => 'mobile',
+              'type' => LrphptPage\UriPage::class,
+              'pages' => [
+                'mobile1' => [
+                  'label' => 'Super Smart Phone',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+                'mobile2' => [
+                  'label' => 'Thin Magic Mobile',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+                'mobile3' => [
+                  'label' => 'Performance Crusher',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+              ],
+            ],
+            'television' => [
+              'label' => 'Television',
+              'uri' => '#',
+              'liClass' => 'television',
+              'type' => LrphptPage\UriPage::class,
+              'pages' => [
+                'television1' => [
+                  'label' => 'Flat Superscreen',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+                'television2' => [
+                  'label' => 'Gigantic LED',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+                'television3' => [
+                  'label' => '3D Experience',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+              ],
+            ],
+            'camera' => [
+              'label' => 'Cameras',
+              'uri' => '#',
+              'liClass' => 'camera',
+              'type' => LrphptPage\UriPage::class,
+              'pages' => [
+                'camera1' => [
+                  'label' => 'Smart Shot',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+                'camera2' => [
+                  'label' => 'Power Shooter',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+                'camera3' => [
+                  'label' => 'Easy Photo Maker',
+                  'uri' => '#',
+                  'type' => LrphptPage\UriPage::class,
+                ],
+              ],
+            ],
+          ],
+        ],
+        'magazines' => [
+          'label' => 'Magazines',
+          'uri' => '#',
+          'liClass' => 'magazines',
+          'type' => LrphptPage\UriPage::class,
+          'pages' => [
+            'magazines1' => [
+              'label' => 'National Geographic',
+              'uri' => '#',
+              'type' => LrphptPage\UriPage::class,
+            ],
+            'magazines2' => [
+              'label' => 'Scientific American',
+              'uri' => '#',
+              'type' => LrphptPage\UriPage::class,
+            ],
+            'magazines3' => [
+              'label' => 'The Spectator',
+              'uri' => '#',
+              'type' => LrphptPage\UriPage::class,
+            ],
+          ],
+        ],
+      ]
+    ],
+];
+
+```
+
+## Usage in MVC View
+
+```php
+
+<?=$this->navigation('default')
+                    ->hcOffCanvasMenu()
+                    ->setUlClass('first-nav')
+                    // Optional setting to use with LmcRbac route guard.
+                    ->setAuthorizationService($this->LmcRbacAuthorizationServiceHelper())
+                    ; ?>
+```
+ ![hcoffcanvas](https://github.com/ALTAMASH80/laminas-mvc-bootstrap-menu/assets/3577323/420d7c04-5b1b-4f5f-8654-b7a7312c558b)

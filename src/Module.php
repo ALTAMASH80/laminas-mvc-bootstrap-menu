@@ -63,7 +63,7 @@ class Module
         return [
             'service_manager' => $provider->getDependencyConfig(),
             'navigation_helpers' => $provider->getNavigationHelper(),
-            'view_helpers' => $provider->getViewHelperConfig(),
+//            'view_helpers' => $provider->getViewHelperConfig(),
         ];
     }
 }
